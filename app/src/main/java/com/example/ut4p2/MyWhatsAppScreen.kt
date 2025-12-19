@@ -23,39 +23,34 @@ import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.ui.graphics.Color
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MyWhatsAppApp() {
     val tabs = listOf("Chats", "Novedades", "Llamadas")
-
-    // 🔑 Estado del pager
+    val LightGreen = Color(0xFF81C784) // Verde claro
     val pagerState = rememberPagerState(
         initialPage = 0,
         pageCount = { tabs.size }
     )
-
     val scope = rememberCoroutineScope()
-
-    // Scroll colapsable de la TopAppBar
     val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior()
-
     Scaffold(
         modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
-
         topBar = {
             Column {
                 MyTopAppBar(scrollBehavior)
-
                 TabRow(
-                    selectedTabIndex = pagerState.currentPage
+                    selectedTabIndex = pagerState.currentPage,
+                    containerColor = LightGreen,
+                    contentColor = Color.Black
                 ) {
                     tabs.forEachIndexed { index, title ->
                         Tab(
                             selected = pagerState.currentPage == index,
                             onClick = {
-                                // 🔄 Tabs → Pager
                                 scope.launch {
                                     pagerState.animateScrollToPage(index)
                                 }
@@ -66,7 +61,6 @@ fun MyWhatsAppApp() {
                 }
             }
         },
-
         floatingActionButton = {
             FloatingActionButton(onClick = { }) {
                 Icon(
@@ -75,18 +69,13 @@ fun MyWhatsAppApp() {
                 )
             }
         }
-
     ) { paddingValues ->
-
-        // 👉 Pager que permite deslizamiento
         HorizontalPager(
             state = pagerState,
             modifier = Modifier
                 .padding(paddingValues)
                 .fillMaxSize()
         ) { page ->
-
-            // 🔄 Pager → Pantallas
             when (page) {
                 0 -> ChatsScreen()
                 1 -> NovedadesScreen()
