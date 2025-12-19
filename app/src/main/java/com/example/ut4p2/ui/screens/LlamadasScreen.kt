@@ -1,4 +1,4 @@
-package com.example.ut4p2.files.screens
+package com.example.ut4p2.ui.screens
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize

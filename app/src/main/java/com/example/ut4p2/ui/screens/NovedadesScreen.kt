@@ -1,4 +1,4 @@
-package com.example.ut4p2.files.screens
+package com.example.ut4p2.ui.screens
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
@@ -7,8 +7,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 
 @Composable
-fun ChatsScreen() {
+fun NovedadesScreen() {
     Box(modifier = Modifier.fillMaxSize(), contentAlignment = androidx.compose.ui.Alignment.Center) {
-        Text(text = "Pantalla de Chats")
+        Text(text = "Pantalla de Novedades")
     }
 }
