@@ -8,26 +8,24 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
+import androidx.compose.material3.TopAppBarScrollBehavior
 import androidx.compose.runtime.Composable
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun MyTopAppBar() {
+fun MyTopAppBar(
+    scrollBehavior: TopAppBarScrollBehavior
+) {
     TopAppBar(
         title = { Text(text = "MyWhatsApp") },
         actions = {
-            IconButton(onClick = { /* Buscar */ }) {
-                Icon(
-                    imageVector = Icons.Filled.Search,
-                    contentDescription = "Buscar"
-                )
+            IconButton(onClick = { }) {
+                Icon(Icons.Filled.Search, contentDescription = "Buscar")
             }
-            IconButton(onClick = { /* Compartir */ }) {
-                Icon(
-                    imageVector = Icons.Filled.Share,
-                    contentDescription = "Compartir"
-                )
+            IconButton(onClick = { }) {
+                Icon(Icons.Filled.Share, contentDescription = "Compartir")
             }
-        }
+        },
+        scrollBehavior = scrollBehavior
     )
 }
