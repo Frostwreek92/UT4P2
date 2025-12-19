@@ -3,7 +3,6 @@ package com.example.ut4p2.ui.screens
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -24,19 +23,24 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import com.example.ut4p2.data.Contact
 import com.example.ut4p2.data.ContactRepository
+import androidx.compose.foundation.combinedClickable
+import androidx.compose.material3.DropdownMenu
+import androidx.compose.material3.DropdownMenuItem
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
+
 
 @Composable
 fun ChatsScreen() {
     LazyColumn(
         modifier = Modifier.fillMaxSize()
     ) {
-
         ContactRepository.contactGroups.forEach { group ->
-
             stickyHeader {
                 GroupHeader(title = group.title)
             }
-
             items(group.contacts) { contact ->
                 ChatItem(contact)
             }
@@ -61,26 +65,60 @@ fun GroupHeader(title: String) {
 
 @Composable
 fun ChatItem(contact: Contact) {
-    Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(12.dp),
-        verticalAlignment = Alignment.CenterVertically
-    ) {
-
-        Image(
-            painter = painterResource(id = contact.imageRes),
-            contentDescription = "Foto de perfil",
+    var showMenu by remember { mutableStateOf(false) }
+    Box {
+        Row(
             modifier = Modifier
-                .size(56.dp)
-                .clip(CircleShape)
-        )
-
-        Spacer(modifier = Modifier.width(12.dp))
-
-        Text(
-            text = contact.name,
-            style = MaterialTheme.typography.bodyLarge
-        )
+                .fillMaxWidth()
+                .combinedClickable(
+                    onClick = {
+                        // Click normal (abrir chat, por ejemplo)
+                    },
+                    onLongClick = {
+                        showMenu = true
+                    }
+                )
+                .padding(12.dp),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Image(
+                painter = painterResource(id = contact.imageRes),
+                contentDescription = "Foto de perfil",
+                modifier = Modifier
+                    .size(56.dp)
+                    .clip(CircleShape)
+            )
+            Spacer(modifier = Modifier.width(12.dp))
+            Text(
+                text = contact.name,
+                style = MaterialTheme.typography.bodyLarge
+            )
+        }
+        DropdownMenu(
+            expanded = showMenu,
+            onDismissRequest = { showMenu = false }
+        ) {
+            DropdownMenuItem(
+                text = { Text("Salir del grupo") },
+                onClick = {
+                    showMenu = false
+                    // Acción salir del grupo
+                }
+            )
+            DropdownMenuItem(
+                text = { Text("Info. grupo") },
+                onClick = {
+                    showMenu = false
+                    // Acción info grupo
+                }
+            )
+            DropdownMenuItem(
+                text = { Text("Crear acceso directo") },
+                onClick = {
+                    showMenu = false
+                    // Acción crear acceso directo
+                }
+            )
+        }
     }
 }
