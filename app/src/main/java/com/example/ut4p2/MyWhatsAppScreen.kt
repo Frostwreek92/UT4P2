@@ -1,6 +1,5 @@
 package com.example.ut4p2
 
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
@@ -11,10 +10,6 @@ import androidx.compose.material3.Tab
 import androidx.compose.material3.TabRow
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import com.example.ut4p2.ui.topbar.MyTopAppBar
 import com.example.ut4p2.ui.screens.ChatsScreen
@@ -25,16 +20,25 @@ import androidx.compose.material.icons.filled.Add
 import androidx.compose.material3.Icon
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.ui.input.nestedscroll.nestedScroll
-
+import androidx.compose.foundation.pager.HorizontalPager
+import androidx.compose.foundation.pager.rememberPagerState
+import androidx.compose.runtime.rememberCoroutineScope
+import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MyWhatsAppApp() {
-
     val tabs = listOf("Chats", "Novedades", "Llamadas")
-    var selectedTabIndex by remember { mutableStateOf(0) }
 
-    // 🔑 Scroll behavior para colapsar/expandir la TopAppBar
+    // 🔑 Estado del pager
+    val pagerState = rememberPagerState(
+        initialPage = 0,
+        pageCount = { tabs.size }
+    )
+
+    val scope = rememberCoroutineScope()
+
+    // Scroll colapsable de la TopAppBar
     val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior()
 
     Scaffold(
@@ -43,11 +47,19 @@ fun MyWhatsAppApp() {
         topBar = {
             Column {
                 MyTopAppBar(scrollBehavior)
-                TabRow(selectedTabIndex = selectedTabIndex) {
+
+                TabRow(
+                    selectedTabIndex = pagerState.currentPage
+                ) {
                     tabs.forEachIndexed { index, title ->
                         Tab(
-                            selected = selectedTabIndex == index,
-                            onClick = { selectedTabIndex = index },
+                            selected = pagerState.currentPage == index,
+                            onClick = {
+                                // 🔄 Tabs → Pager
+                                scope.launch {
+                                    pagerState.animateScrollToPage(index)
+                                }
+                            },
                             text = { Text(text = title) }
                         )
                     }
@@ -56,9 +68,7 @@ fun MyWhatsAppApp() {
         },
 
         floatingActionButton = {
-            FloatingActionButton(
-                onClick = { /* Acción FAB */ }
-            ) {
+            FloatingActionButton(onClick = { }) {
                 Icon(
                     imageVector = Icons.Filled.Add,
                     contentDescription = "Nuevo"
@@ -67,12 +77,17 @@ fun MyWhatsAppApp() {
         }
 
     ) { paddingValues ->
-        Box(
+
+        // 👉 Pager que permite deslizamiento
+        HorizontalPager(
+            state = pagerState,
             modifier = Modifier
                 .padding(paddingValues)
                 .fillMaxSize()
-        ) {
-            when (selectedTabIndex) {
+        ) { page ->
+
+            // 🔄 Pager → Pantallas
+            when (page) {
                 0 -> ChatsScreen()
                 1 -> NovedadesScreen()
                 2 -> LlamadasScreen()
