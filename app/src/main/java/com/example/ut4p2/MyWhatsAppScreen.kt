@@ -33,7 +33,7 @@ import androidx.compose.foundation.clickable
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MyWhatsAppApp() {
-    val tabs = listOf("Chats", "Novedades", "Llamadas")
+    val tabs = listOf("Chats", "Pause/Start", "Smile")
     val LightGreen = Color(0xFF81C784) // Verde claro
     val pagerState = rememberPagerState(
         initialPage = 0,
@@ -89,9 +89,7 @@ fun MyWhatsAppApp() {
 @OptIn(ExperimentalAnimationGraphicsApi::class)
 @Composable
 fun AnimatedFab() {
-    val image =
-        AnimatedImageVector.animatedVectorResource(R.drawable.avd_tick_to_cross)
-
+    val image = AnimatedImageVector.animatedVectorResource(R.drawable.avd_tick_to_cross)
     var atEnd by remember { mutableStateOf(false) }
 
     Image(
