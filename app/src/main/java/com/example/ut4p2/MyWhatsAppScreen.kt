@@ -15,9 +15,6 @@ import com.example.ut4p2.ui.topbar.MyTopAppBar
 import com.example.ut4p2.ui.screens.ChatsScreen
 import com.example.ut4p2.ui.screens.LlamadasScreen
 import com.example.ut4p2.ui.screens.NovedadesScreen
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Add
-import androidx.compose.material3.Icon
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.foundation.pager.HorizontalPager
@@ -25,6 +22,13 @@ import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.graphics.Color
 import kotlinx.coroutines.launch
+import androidx.compose.animation.graphics.ExperimentalAnimationGraphicsApi
+import androidx.compose.animation.graphics.res.rememberAnimatedVectorPainter
+import androidx.compose.animation.graphics.vector.AnimatedImageVector
+import androidx.compose.runtime.*
+import androidx.compose.animation.graphics.res.animatedVectorResource
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -63,10 +67,7 @@ fun MyWhatsAppApp() {
         },
         floatingActionButton = {
             FloatingActionButton(onClick = { }) {
-                Icon(
-                    imageVector = Icons.Filled.Add,
-                    contentDescription = "Nuevo"
-                )
+                AnimatedFab()
             }
         }
     ) { paddingValues ->
@@ -83,4 +84,22 @@ fun MyWhatsAppApp() {
             }
         }
     }
+}
+
+@OptIn(ExperimentalAnimationGraphicsApi::class)
+@Composable
+fun AnimatedFab() {
+    val image =
+        AnimatedImageVector.animatedVectorResource(R.drawable.avd_tick_to_cross)
+
+    var atEnd by remember { mutableStateOf(false) }
+
+    Image(
+        painter = rememberAnimatedVectorPainter(image, atEnd),
+        contentDescription = "VectorDrawable",
+        modifier = Modifier.clickable {
+            atEnd = !atEnd
+        },
+    )
+
 }
